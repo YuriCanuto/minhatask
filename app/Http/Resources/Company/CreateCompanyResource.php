@@ -15,10 +15,12 @@ class CreateCompanyResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->uuid,
-            'name' => $this->name,
-            'description' => $this->description,
-            'contract_type' => $this->contract_type,
+            'data' => [
+                'id' => $this->uuid,
+                'name' => $this->name,
+                'description' => $this->description,
+                'contract_type' => $this->contract_type,
+            ]            
         ];
     }
 }

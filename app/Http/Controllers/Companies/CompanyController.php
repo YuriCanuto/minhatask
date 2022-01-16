@@ -7,6 +7,7 @@ use App\Http\Requests\Company\StoreCompanyRequest;
 use App\Http\Resources\Company\CompanyResource;
 use App\Http\Resources\Company\CompanyCollection;
 use App\Http\Resources\Company\CreateCompanyResource;
+use App\Http\Services\Company\CompanyService;
 use App\Models\Company\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,11 +15,11 @@ use Illuminate\Support\Facades\Http;
 
 class CompanyController extends Controller
 {
-    private $company;
+    private $service;
 
-    public function __construct(Company $company)
+    public function __construct(CompanyService $service)
     {
-        $this->company = $company;
+        $this->service = $service;
     }
     /**
      * Display a listing of the resource.
@@ -27,11 +28,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $result = $this->company->where('user_id', auth()->user()->id)->paginate(10);
-
-        $data = CompanyResource::collection($result)->response()->getData();
-
-        return response()->json($data, Response::HTTP_OK);
+        return response()->json($this->service->list(), Response::HTTP_OK);
     }
 
     /**
@@ -43,12 +40,12 @@ class CompanyController extends Controller
     public function store(StoreCompanyRequest $request)
     {   
         try {
-            $company = $this->company->create($request->all());
+            $company = $this->service->create($request->all());
         } catch (\Exception $e) {
             //throw $th;
         }
         
-        return response()->json(new CreateCompanyResource($company), Response::HTTP_CREATED);
+        return response()->json($company, Response::HTTP_CREATED);
     }
 
     /**

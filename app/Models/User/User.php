@@ -2,7 +2,7 @@
 
 namespace App\Models\User;
 
-use App\Models\Card\Card;
+use App\Models\Company\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,10 +69,9 @@ class User extends Authenticatable
 
     // Relatioships
 
-    /** @return HasMany  */
-    public function cards()
+    public function companies()
     {
-        return $this->hasMany(Card::class, 'user_id');
+        return $this->hasMany(Company::class, 'user_id');
     }
 
     /**

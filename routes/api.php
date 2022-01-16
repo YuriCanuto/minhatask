@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Card\CardController;
+use App\Http\Controllers\Companies\CompanyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/perfil', [SessionController::class, 'perfil']);
     Route::get('/logout', [SessionController::class, 'logout']);
     Route::post('/card', [CardController::class, 'store']);
+
+    Route::prefix('v1/company')->group(function () {
+        Route::get('/', [CompanyController::class, 'index']);
+        Route::post('/', [CompanyController::class, 'store']);
+    });
 });

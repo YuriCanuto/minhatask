@@ -12,6 +12,7 @@ use App\Models\Company\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Ramsey\Uuid\Uuid;
 
 class CompanyController extends Controller
 {
@@ -39,11 +40,7 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {   
-        try {
-            $company = $this->service->create($request->all());
-        } catch (\Exception $e) {
-            //throw $th;
-        }
+        $company = $this->service->create($request->validated());
         
         return response()->json($company, Response::HTTP_CREATED);
     }
@@ -51,24 +48,38 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $id)
     {
-        //
+        if (!Uuid::isValid($id)) {
+            return response()->json([
+                'message' => "Not Found",
+                'errors' => "Request Not Found",
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+        $company = $this->service->show($id);
+
+        return response()->json($company, Response::HTTP_OK);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        //
+        if (!Uuid::isValid($id)) {
+            return response()->json([
+                'message' => "Not Found",
+                'errors' => "Request Not Found",
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**

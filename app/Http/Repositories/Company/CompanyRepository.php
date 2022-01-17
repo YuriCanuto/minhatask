@@ -19,11 +19,23 @@ class CompanyRepository implements BaseRepositoryInterface {
     }
 
     public function getById($id) {
-        return $this->company->where('id', $id)->first();
+
+        try {
+            $company = $this->company->where('uuid', $id)->first();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $company;
     }
 
     public function create(array $data) {
-        return $this->company->create($data);
+        try {
+            $result = $this->company->create($data);
+        } catch (\Exception $e) {
+            \Log::error("Message: {$e->getMessage()}");
+        }
+        return $result;
     }
 
     public function update(array $data, int $id) {

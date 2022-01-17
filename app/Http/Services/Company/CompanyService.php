@@ -22,6 +22,17 @@ class CompanyService {
         return CompanyResource::collection($result)->response()->getData();
     }
 
+    public function show(string $id)
+    {
+        try {
+            $result = $this->repository->getById($id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        
+        return new CompanyResource($result);
+    }
+
     public function create(array $data)
     {
         $company = $this->repository->create($data);

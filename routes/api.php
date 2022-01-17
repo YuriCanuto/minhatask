@@ -23,5 +23,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('v1/company')->group(function () {
         Route::get('/', [CompanyController::class, 'index']);
         Route::post('/', [CompanyController::class, 'store']);
+        Route::get('/{id}', [CompanyController::class, 'show']);
     });
 });

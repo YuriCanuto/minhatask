@@ -24,11 +24,7 @@ class CompanyService {
 
     public function show(string $id)
     {
-        try {
-            $result = $this->repository->getById($id);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $result = $this->repository->getById($id);
         
         return new CompanyResource($result);
     }
@@ -38,6 +34,16 @@ class CompanyService {
         $company = $this->repository->create($data);
 
         return new CreateCompanyResource($company);
+    }
+
+    public function update(array $data, string $id)
+    {
+        return $this->repository->update($data, $id);
+    }
+
+    public function delete(string $id)
+    {
+        return $this->repository->delete($id);
     }
 
 }

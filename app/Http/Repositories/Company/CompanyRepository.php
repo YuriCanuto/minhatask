@@ -20,13 +20,8 @@ class CompanyRepository implements BaseRepositoryInterface {
 
     public function getById($id) {
 
-        try {
-            $company = $this->company->where('uuid', $id)->first();
-        } catch (\Exception $e) {
-            throw $e;
-        }
+       return $this->company->where('uuid', $id)->first();      
 
-        return $company;
     }
 
     public function create(array $data) {
@@ -38,15 +33,29 @@ class CompanyRepository implements BaseRepositoryInterface {
         return $result;
     }
 
-    public function update(array $data, int $id) {
-        $company = $this->company->where('id', $id)->first();
+    public function update(array $data, string $id) {
 
-        return $company->fill($data)->save();
+        try {
+            $company = $this->company->where('uuid', $id)->first();
+
+            $company->fill($data)->save();
+        } catch (\Exception $e) {
+            \Log::error("Message: {$e->getMessage()}");
+        }
+        
+
+        return $company;
     }
 
     public function delete($id) {
-        $company = $this->company->where('id', $id)->first();
 
-        return $company->delete();
+        try {
+            $company = $this->company->where('uuid', $id)->first();
+            $company->delete();
+        } catch (\Exception $e) {
+            \Log::error("Message: {$e->getMessage()}");
+        }
+
+        return $company;
     }
 }

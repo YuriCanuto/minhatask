@@ -10,7 +10,7 @@ interface BaseRepositoryInterface {
 
     public function create(array $payload);
 
-    public function update(array $payload, int $id);
+    public function update(array $payload, string $id);
 
     public function delete($id);
 }

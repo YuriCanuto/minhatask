@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Companies;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Company\StoreCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Resources\Company\CompanyResource;
 use App\Http\Resources\Company\CompanyCollection;
 use App\Http\Resources\Company\CreateCompanyResource;
@@ -72,7 +73,7 @@ class CompanyController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCompanyRequest $request, string $id)
     {
         if (!Uuid::isValid($id)) {
             return response()->json([
@@ -80,6 +81,10 @@ class CompanyController extends Controller
                 'errors' => "Request Not Found",
             ], Response::HTTP_NOT_FOUND);
         }
+
+        $this->service->update($request->validated(), $id);
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 
     /**
@@ -90,6 +95,15 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Uuid::isValid($id)) {
+            return response()->json([
+                'message' => "Not Found",
+                'errors' => "Request Not Found",
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->service->delete($id);
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 }
